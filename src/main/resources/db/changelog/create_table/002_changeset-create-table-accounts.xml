@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="db/db.changelog-master.xml"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="uuid_type" value="uuid" dbms="postgresql"/>
+  <property name="uuid_type" value="uuid" dbms="h2"/>
+
+  <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+  <property name="uuid_function" value="uuid()" dbms="h2"/>
+
+  <!-- Проверяем есть ли таблица accounts -->
+  <changeSet id="drop-table-accounts" author="dg">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="accounts" />
+    </preConditions>
+    <dropTable cascadeConstraints="true" tableName="accounts"/>
+  </changeSet>
+  <!-- create table accounts -->
+  <changeSet id="create-table-accounts" author="dg">
+    <createTable tableName="accounts" >
+      <column autoIncrement="true" name="id" type="bigserial">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="pk_account"/>
+      </column>
+      <column name="created_at" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP(3)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP(3)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="active" type="boolean" defaultValue="false">
+        <constraints nullable="false"/>
+      </column>
+      <column name="public_id"  type="${uuid_type}" defaultValueComputed="${uuid_function}">
+        <constraints nullable="false" unique="true" uniqueConstraintName="idx_account_uuid_unq"/>
+      </column>
+      <column name="username" type="varchar(200)">
+        <constraints nullable="false"  unique="true" uniqueConstraintName="idx_account_username_unq"/>
+      </column>
+      <column name="email" type="varchar(200)">
+        <constraints nullable="false"  unique="true"  uniqueConstraintName="idx_account_email_unq"/>
+      </column>
+      <column name="passwd" type="varchar(512)">
+        <constraints nullable="false" />
+      </column>
+      <column name="phone" type="varchar(15)">
+        <constraints nullable="false"  unique="true" uniqueConstraintName="idx_account_phone_unq"/>
+      </column>
+      <column name="department_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

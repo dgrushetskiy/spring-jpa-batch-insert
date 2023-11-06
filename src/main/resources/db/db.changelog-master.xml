@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="db/db.changelog-master.xml"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="schema" value="public" global="true"/>
+  <changeSet logicalFilePath="db/db.changelog-master.xml" id="0" author="dg">
+    <tagDatabase tag="INITIAL"/>
+  </changeSet>
+  <!--  create table  -->
+  <include file="changelog/create_table/001_changeset-create-schema-db.xml" relativeToChangelogFile="true" context="local"/>
+  <include file="changelog/create_table/002_changeset-create-table-accounts.xml" relativeToChangelogFile="true"/>
+  <include file="changelog/create_table/003_changeset-create-table-departments.xml" relativeToChangelogFile="true"/>
+
+ <!-- insert data in table -->
+
+</databaseChangeLog>
